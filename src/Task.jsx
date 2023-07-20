@@ -1,43 +1,54 @@
-import React, { useState } from "react";
+// Task.js
+import React, { useRef } from "react";
 
-function Task({ name, done, updateTask, idx }) {
-  const [editMode, setEditMode] = useState(false);
+function Task({
+  name,
+  done,
+  id,
+  activeTasks,
+  updateTask,
+  deleteTask,
+  editTask,
+  editTaskId,
+}) {
+  const taskRef = useRef(null);
 
-  const deleteTask = () => {
-    updateTask(idx);
-  };
-
-  const editTask = () => {
-    setEditMode(true);
-  };
-
-  const markTaskAsDone = () => {
-    updateTask(idx);
-  };
+  function handleBlur() {
+    const newName = taskRef.current.textContent.trim();
+    if (newName !== name) {
+      editTask(id);
+    }
+  }
 
   return (
-    <li className="task">
+    <li className={`task ${done ? "done" : ""}`}>
       <input
         type="checkbox"
         checked={done}
-        onChange={function () { markTaskAsDone(idx) }}
+        onChange={() => updateTask(id)}
         name=""
         id=""
       />
-      <p> {name} </p>
-      {editMode ? (
-        <input
-          type="text"
-          placeholder="Edit task"
-          onChange={function (event) {
-            setTaskName(event.target.value);
-          }}
-          value={taskName}
-        />
+      {editTaskId === id ? (
+        <p
+          ref={taskRef}
+          contentEditable
+          onBlur={handleBlur}
+          suppressContentEditableWarning
+        >
+          {name}
+        </p>
       ) : (
-        <button onClick={editTask}>Edit</button>
+        <p style={{ textDecoration: done ? "line-through" : "none" }}>{name}</p>
       )}
-      <button onClick={deleteTask}>Delete</button>
+      {activeTasks.length > 1 && (
+        <button onClick={() => deleteTask(id)}>Delete</button>
+      )}
+      {!done && (
+        <button onClick={() => editTask(id)}>
+          {editTaskId === id ? "Cancel" : "Edit"}
+        </button>
+      )}
     </li>
   );
 }
