@@ -1,8 +1,5 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Task from './Task'
+import React, { useState } from "react";
+import Task from "./Task";
 
 function App() {
   const [taskName, setTaskName] = useState("");
@@ -13,18 +10,29 @@ function App() {
     { name: "Finish this todo application", done: false },
   ]);
 
+  const deleteTask = (idx) => {
+    setTasks(prevTasks => prevTasks.filter((task, i) => i !== idx));
+  };
 
-  function updateTask(taskId) {
-    // const newTasks = tasks; 
-    // newTasks[taskId].done = !newTasks[taskId].done;
-    tasks[taskId].done = !tasks[taskId].done;
-    setTasks(prev => [...prev]);
-    console.log(tasks)
-  }
-  
+  const editTask = (idx) => {
+    setTasks(prevTasks => {
+      const task = prevTasks[idx];
+      task.name = taskName;
+      return prevTasks.map((task, i) => i === idx ? task : prevTasks[i]);
+    });
+  };
+
+  const markTaskAsDone = (idx) => {
+    setTasks(prevTasks => {
+      const task = prevTasks[idx];
+      task.done = !task.done;
+      return prevTasks.map((task, i) => i === idx ? task : prevTasks[i]);
+    });
+  };
+
   return (
     <>
-      <h1>My Todo app</h1> 
+      <h1>My Todo app</h1>
       <form onSubmit={function(event) {
         event.preventDefault();
 
@@ -48,7 +56,7 @@ function App() {
         </ul>
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
