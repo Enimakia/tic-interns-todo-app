@@ -1,4 +1,3 @@
-// Task.js
 import React, { useRef } from "react";
 
 function Task({

@@ -36,6 +36,7 @@ function App() {
     const task = tasks.find((task) => task.id === taskId);
     setEditTaskName(task.name);
     setEditTaskId(taskId);
+    
   }
 
   function cancelEdit() {
@@ -68,8 +69,9 @@ function App() {
         <input
           type="text"
           placeholder="Enter task"
-          onChange={(event) => setTaskName(event.target.value)}
-          value={editTaskId ? editTaskName : taskName}
+          onChange={(event) =>
+            editTaskId ? setEditTaskName(event.target.value) : setTaskName(event.target.value)
+          }
         />
         <button type="submit">{editTaskId ? "Update" : "Create"}</button>
         {editTaskId && <button onClick={cancelEdit}>Cancel</button>}
